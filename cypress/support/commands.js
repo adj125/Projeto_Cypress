@@ -1,20 +1,21 @@
-import{faker} from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
-Cypress.Commands.add('preencherNovoUsuario', () => {
+Cypress.Commands.add('preencherNovoUsuario', (usuario) => {
 
-    //Clica no link de Signup / Login e preenche os dados do usuário para cadastro
+    //Clica no link de Signup/Login e preenche os dados do usuário para cadastro
     cy.get('a[href="/login"]').click();
-    cy.get('[data-qa="signup-name"]').type(faker.person.firstName());
-    cy.get('[data-qa="signup-email"]').type(faker.internet.email());
+    cy.get('[data-qa="signup-name"]').type(usuario.nome);
+    cy.get('[data-qa="signup-email"]').type(usuario.email);
     cy.get('[data-qa="signup-button"]').click();
 });
 
-Cypress.Commands.add('preencherFormularioCadastroECriarConta', () => {
+Cypress.Commands.add('preencherFormularioCadastroECriarConta', (usuario) => {
+
     cy.get('#password').should('be.visible');
-    
+
     //Preenchendo os dados do usuário no formulário de cadastro
     cy.get('#id_gender1').check();
-    cy.get('#password').type(faker.internet.password());
+    cy.get('#password').type(usuario.senha);
     cy.get('#days').select('8');
     cy.get('#months').select('December');
     cy.get('#years').select('1990');
@@ -22,7 +23,7 @@ Cypress.Commands.add('preencherFormularioCadastroECriarConta', () => {
     //Clica no checkbox de newsletter e ofertas
     cy.get('#newsletter').check();
     cy.get('#optin').check();
-    
+
     //Preenchendo o endereço e outras informações do usuário
     cy.get('#first_name').type(faker.person.firstName());
     cy.get('#last_name').type(faker.person.lastName());
@@ -35,4 +36,11 @@ Cypress.Commands.add('preencherFormularioCadastroECriarConta', () => {
 
     // Clica no botão de criar conta
     cy.get('[data-qa="create-account"]').click();
+});
+
+Cypress.Commands.add('preencherFormularioLogin', (usuario) => {
+    //Preenche os dados do usuário para login
+    cy.get('[data-qa="login-email"]').type(usuario.email);
+    cy.get('[data-qa="login-password"]').type(usuario.senha);
+    cy.get('[data-qa="login-button"]').click();
 });
